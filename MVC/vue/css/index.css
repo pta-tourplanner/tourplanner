@@ -1,0 +1,50 @@
+/*********** Entête de la page****************************/
+#header{
+    margin-top: 1em;
+    width: 100%;
+}
+
+#entete{
+    display: flex;
+}
+
+#logo>img{
+    height: 100%;
+}
+
+#entete #titre{
+    width: 100%;
+    text-align: right;
+    margin-right: 5em;
+}
+
+/**********Mise en forme de bouton*/
+#mainBtn>div{
+    margin: 10px;
+}
+
+#mainBtn>div>a{
+    width: 300px;
+    height: 100px;
+}
+
+
+
+
+/********* Pied de la page *****************************/
+
+#ligneFooter{
+    height: 1px;
+    width: 100%;
+    background-color: #000000;
+}
+
+#foot{
+    width: 100%;
+    margin-top: 0.5em;
+}
+
+#foot>p{
+    width: 100%;
+    text-align: center;
+}
