@@ -15,62 +15,52 @@
     <?php include('header.php'); ?>
     
     <!-- LE CORPS -->
-    <div class="row">
-        <!-- Création des boutons principaux -->
-        <div id="mainBtn" class="col-md-12">
-            <?php
-            $sql = "SELECT t.table_name, c.column_name
-                    FROM information_schema.tables t
-                    JOIN information_schema.key_column_usage c
-                    ON t.table_name = c.table_name
-                    WHERE   t.table_schema='pta'
-                    AND c.constraint_name= 'PRIMARY'
-                    AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
-                    AND ordinal_position = 1";
-            $data = $connexion->query($sql);
-            $html = '';
-            while ($row = $data->fetch()){
-                $html .= '<div class="col-xs-12 col-md-6">';
-                $html .= '<a href="table_liste_pta.php?tab="' . $row['table_name'] .
-                        '&col=' . $row['column_name'] . '" class="btn btn-primary btn-lg">'
-                        . ucfirst($row['table_name']). '</a></div>';
-            }
-            echo $html;
-            ?>
-        </div>
+    <!-- Création des boutons principaux -->
+    <section id="mainBtn" class="row">
+        <?php
+        $sql = "SELECT t.table_name, c.column_name
+                FROM information_schema.tables t
+                JOIN information_schema.key_column_usage c
+                ON t.table_name = c.table_name
+                WHERE   t.table_schema='pta'
+                AND c.constraint_name= 'PRIMARY'
+                AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
+                AND ordinal_position = 1";
+        $data = $connexion->query($sql);
+        $html = '';
+        while ($row = $data->fetch()) {
+            $html .= '<div class="col-sm-5 col-md-5">';
+            $html .= '<a href="table_liste_pta.php?tab="' . $row['table_name'] .
+                    '&col=' . $row['column_name'] . '" class="btn btn-primary btn-lg">'
+                    . ucfirst($row['table_name']). '</a></div>';
+        }
+        $html .= '<div class="col-sm-5 col-sm-offset-2 col-md-5 col-md-offset-2"><a href="table_liste_pta.php" class="btn btn-primary btn-lg">Calendrier</a></div>';
+        echo $html;
+        ?>
+    </section>
         <!-- Création des boutons secondaire -->
-        <div id="subBtn">
-            <?php 
-            $sql = "SELECT t.table_name, c.column_name
-                    FROM information_schema.tables t
-                    JOIN information_schema.key_column_usage c
-                    ON t.table_name = c.table_name
-                    WHERE   t.table_schema='pta'
-                    AND c.constraint_name= 'PRIMARY'
-                    AND c.column_name  NOT IN ('CODE_CLIENT','idClient', 'idMission','idPersonne','idPrestation','idCompte')
-                    AND ordinal_position = 1";
-            $data = $connexion->query($sql);
-            $html = '<div class="btn-group" role="group">';
-            while($row = $data->fetch()){
-                $html .= '<a href="table_liste_php?tab="' . $row['table_name'] .
-                        '$col=' . $row['column_name'] . '" type="button" class="btn btn-secondary">'
-                        . ucfirst($row['table_name']) . '</a>';
-            }
-            $html .= '</div>';
-            echo $html;
-            ?>
-        </div>
-
-
-<!-- <div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" class="btn btn-secondary">Left</button>
-  <button type="button" class="btn btn-secondary">Middle</button>
-  <button type="button" class="btn btn-secondary">Right</button>
-</div> -->
-
-
-    <!-- <a href="clients.php?tab=clients&tab=clients&col=idClient" class="btn btn-primary btn-lg">Clients</a> -->
-    </div>
+    <section id="subBtn" class="row">
+        <?php 
+        $sql = "SELECT t.table_name, c.column_name
+                FROM information_schema.tables t
+                JOIN information_schema.key_column_usage c
+                ON t.table_name = c.table_name
+                WHERE   t.table_schema='pta'
+                AND c.constraint_name= 'PRIMARY'
+                AND c.column_name  NOT IN ('CODE_CLIENT','idClient', 'idMission','idPersonne','idPrestation','idCompte')
+                AND ordinal_position = 1";
+        $data = $connexion->query($sql);
+        $html = '<div class="btn-group" role="group">';
+        while ($row = $data->fetch()) {
+            $html .= '<a href="table_liste_php?tab="' . $row['table_name'] .
+                    '$col=' . $row['column_name'] . '" type="button" class="btn btn-secondary">'
+                    . ucfirst($row['table_name']) . '</a>';
+        }
+        $html .= '</div>';
+        echo $html;
+        unset($connexion);
+        ?>
+    </section>
     <!-- LE PIED DE PAGE -->
     <?php include('footer.php')?>
 </body>
