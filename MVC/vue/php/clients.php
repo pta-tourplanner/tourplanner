@@ -21,13 +21,13 @@
         // $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
         
         $sql = "SELECT t.table_name, c.column_name
-        FROM information_schema.tables t
-        JOIN information_schema.key_column_usage c
-        ON t.table_name = c.table_name
-        WHERE   t.table_schema='pta'
-        AND c.constraint_name= 'PRIMARY'
-        AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
-        AND ordinal_position = 1";
+                FROM information_schema.tables t
+                JOIN information_schema.key_column_usage c
+                ON t.table_name = c.table_name
+                WHERE   t.table_schema='pta'
+                AND c.constraint_name= 'PRIMARY'
+                AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
+                AND ordinal_position = 1";
 
         $btns = controleur::doLgBtns($sql);
         echo $btns;
@@ -74,7 +74,6 @@
         // echo $html;
 
         // unset($connexion);
-        $connexion->disconnect(); // unset($connexion);
     } catch (PDOException $e){
         echo $e->getMessage();
     }

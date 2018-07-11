@@ -16,10 +16,12 @@ class controleur{
         try{
             $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
             // Exécution de la requête
-            $data = $connexion->prepare($sql);
+            $data = $connexion->getConnexion()->prepare($sql);
             $data->execute($params);
 
             $html = '';
+            $couleur;
+
             while ($row = $data->fetch()) {
                 // Changement de couleur du bouton
                 switch($row['table_name']){
@@ -44,9 +46,37 @@ class controleur{
                         . ucfirst($row['table_name']). '</a></div>';
             }
             return $html;
+            $connexion->disconnect();
         } catch (PDOException $e){
             throw new Exception("Error BDD", $e->getMessage());
-            
+        }
+    }
+    /**
+     * Méthode qui envoie les nom de table d'une requête SQL
+     * passée en paramètre sous la forme bouton secondaire de HTML
+     * @param string sql
+     * @param array params
+     * @throws Exception
+     * @return string
+     */
+    static function doSubBtns($sql = '', $params = array()){
+        try{
+            $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
+            // Exécution de la requête
+            $data = $connexion->getConnexion()->prepare($sql);
+            $data->execute($params);
+
+            $html = '<div class="btn-group" role="group">';
+            while ($row = $data->fetch()) {
+                $html .= '<a href="table_liste_php?tab="' . $row['table_name'] .
+                        '$col=' . $row['column_name'] . '" type="button" class="btn btn-dark">'
+                        . ucfirst($row['table_name']) . '</a>';
+            }
+            $html .= '</div>';
+            return $html;
+            $connexion->disconnect();
+        } catch (PDOException $e){
+            throw new Exception("Error BDD", $e->getMessage());
         }
     }
 

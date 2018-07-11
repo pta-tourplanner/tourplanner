@@ -9,8 +9,9 @@
     <title>PTA Tour Planner</title>
 </head>
 <body class="container">
-    <!-- Connexion à la base de données -->
-    <?php require_once('../../modele/pta_mysql.php'); ?>
+    <!-- Association à controleur -->
+    <?php require_once('../../controleur/controle.php'); ?>
+
     <!-- L'ENTETE DE LA PAGE -->
     <?php include('header.php'); ?>
     
@@ -26,16 +27,8 @@
                 AND c.constraint_name= 'PRIMARY'
                 AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
                 AND ordinal_position = 1";
-        $data = $connexion->query($sql);
-        $html = '';
-        while ($row = $data->fetch()) {
-            $html .= '<div class="col-sm-5 col-md-5">';
-            $html .= '<a href="table_liste_pta.php?tab="' . $row['table_name'] .
-                    '&col=' . $row['column_name'] . '" class="btn btn-primary btn-lg">'
-                    . ucfirst($row['table_name']). '</a></div>';
-        }
-        $html .= '<div class="col-sm-5 col-sm-offset-2 col-md-5 col-md-offset-2"><a href="table_liste_pta.php" class="btn btn-primary btn-lg">Calendrier</a></div>';
-        echo $html;
+        $btns = controleur::doLgBtns($sql);
+        echo $btns;
         ?>
     </section>
         <!-- Création des boutons secondaire -->
@@ -49,19 +42,11 @@
                 AND c.constraint_name= 'PRIMARY'
                 AND c.column_name  NOT IN ('CODE_CLIENT','idClient', 'idMission','idPersonne','idPrestation','idCompte')
                 AND ordinal_position = 1";
-        $data = $connexion->query($sql);
-        $html = '<div class="btn-group" role="group">';
-        while ($row = $data->fetch()) {
-            $html .= '<a href="table_liste_php?tab="' . $row['table_name'] .
-                    '$col=' . $row['column_name'] . '" type="button" class="btn btn-secondary">'
-                    . ucfirst($row['table_name']) . '</a>';
-        }
-        $html .= '</div>';
-        echo $html;
-        unset($connexion);
+        $subBtns = controleur::doSubBtns($sql);
+        echo $subBtns
         ?>
     </section>
     <!-- LE PIED DE PAGE -->
-    <?php include('footer.php')?>
+    <?php include('footer.php'); ?>
 </body>
 </html>

@@ -11,7 +11,7 @@
     protected $host;
     protected $charset = 'utf8';
     protected $sgbd;
-    protected $connexion;
+    private $connexion;
 
     // Attribut static
     protected static $connected = false;
@@ -91,6 +91,10 @@
     }
     public function setSgbd($newSgbd){
         $this->sgbd = (string) $newSgbd;
+    }
+
+    public function getConnexion(){
+        return $this->connexion;
     }
 
     public function getConnected(){
