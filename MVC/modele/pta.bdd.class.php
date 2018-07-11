@@ -1,11 +1,6 @@
-
-<!-- Fatal error: Uncaught Error: 
-Call to a member function setAttribute() on null in 
-C:\UwAmp\www\projet_PTA\MVC\modele\pta.bdd.php on line 38 -->
-
 <?php 
 /**
- *  CLasse qui permet de se connecter à la base de données de PTA
+ *  Classe qui permet de se connecter à la base de données de PTA
  */
 
  class BDD_PTA{
@@ -102,50 +97,4 @@ C:\UwAmp\www\projet_PTA\MVC\modele\pta.bdd.php on line 38 -->
         return self::$connected;
     }
 
-    /**
-     * Méthode qui envoie les nom de table d'une requête SQL
-     * passée en paramètre sous la forme grand bouton de HTML
-     * @param string sql
-     * @param array params
-     * @throws Exception
-     * @return string
-     */
-    public function doLgBtns($sql = '', $params = array()){
-        try{
-            // Exécution de la requête
-            $data = $this->connexion->prepare($sql);
-            $data->execute($params);
-
-            $html = '';
-            while ($row = $data->fetch()) {
-                // Changement de couleur du bouton
-                switch($row['table_name']){
-                    case 'clients':
-                        $couleur = 'primary';
-                        break;
-                    case 'missions':
-                        $couleur = 'warning';
-                        break;
-                    case 'personnes':
-                        $couleur = 'secondary';
-                        break;
-                    case 'prestations':
-                        $couleur = 'info';
-                        break;
-                    default:
-                        $couleur = 'primary';
-                }
-                $html .= '<div class="col-sm-5 col-md-5">';
-                $html .= '<a href="table_liste_pta.php?tab="' . $row['table_name'] .
-                        '&col=' . $row['column_name'] . '" class="btn btn-' . $couleur . ' btn-lg">'
-                        . ucfirst($row['table_name']). '</a></div>';
-            }
-            return $html;
-        } catch (PDOException $e){
-            throw new Exception("Error BDD", $e->getMessage());
-            
-        }
-    }
 }
-
-?>

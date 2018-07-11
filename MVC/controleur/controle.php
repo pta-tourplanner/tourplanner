@@ -1,10 +1,9 @@
 <?php
-
-require_once('../modele/pta.bdd.class.php');
+require_once(realpath(dirname(__FILE__) .'/../modele/pta.bdd.class.php'));
 
 class controleur{
-
-     /**
+    
+    /**
      * Méthode qui envoie les nom de table d'une requête SQL
      * passée en paramètre sous la forme grand bouton de HTML
      * @param string sql
@@ -12,10 +11,12 @@ class controleur{
      * @throws Exception
      * @return string
      */
-    public function doLgBtns($sql = '', $params = array()){
+    
+    static function doLgBtns($sql = '', $params = array()){
         try{
+            $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
             // Exécution de la requête
-            $data = $this->connexion->prepare($sql);
+            $data = $connexion->prepare($sql);
             $data->execute($params);
 
             $html = '';

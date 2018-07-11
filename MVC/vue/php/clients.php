@@ -12,12 +12,13 @@
     <div class="row">
     <!-- L'ENTETE DE LA PAGE -->
     <?php include('header.php'); ?>
+    <?php require_once('../../controleur/controle.php'); ?>
 
     <?php 
     try{
         // Connexion à la base de données avec la Class BDD_PTA 
-        require_once('../../modele/pta.bdd.class.php');
-        $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
+        // require_once('../../modele/pta.bdd.class.php');
+        // $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
         
         $sql = "SELECT t.table_name, c.column_name
         FROM information_schema.tables t
@@ -28,7 +29,7 @@
         AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
         AND ordinal_position = 1";
 
-        $btns = $connexion->doLgBtns($sql);
+        $btns = controleur::doLgBtns($sql);
         echo $btns;
 
         // require_once('../../modele/pta_mysql.php');
