@@ -10,13 +10,13 @@
 </head>
 <body class="container">
     <!-- Association à controleur -->
-    <?php require_once('../../controleur/controle.php'); ?>
+    <?php require_once('../../controleur/ControleTable.php'); ?>
 
     <!-- L'ENTETE DE LA PAGE -->
     <?php include('header.php'); ?>
     
     <!-- LE CORPS "TABLEU"-->
-    <?php controleur::doTable($_GET['tab']); ?>
+    <?php ControleTable::doTable($_GET['tab']); ?>
 
     <!-- LE PIED DE PAGE -->
     <?php include('footer.php'); ?>
