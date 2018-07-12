@@ -9,8 +9,8 @@
     <title>PTA Tour Planner</title>
 </head>
 <body class="container">
-    <!-- Association à controleur -->
-    <?php require_once('../../controleur/controle.php'); ?>
+    <!-- Association à controleur de Bouton -->
+    <?php require_once('../../controleur/ControleBtn.php'); ?>
 
     <!-- L'ENTETE DE LA PAGE -->
     <?php include('header.php'); ?>
@@ -27,7 +27,7 @@
                 AND c.constraint_name= 'PRIMARY'
                 AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
                 AND ordinal_position = 1";
-        $btns = controleur::doLgBtns($sql);
+        $btns = ControleBtn::doLgBtns($sql);
         echo $btns;
         ?>
     </section>
@@ -42,7 +42,7 @@
                 AND c.constraint_name= 'PRIMARY'
                 AND c.column_name  NOT IN ('CODE_CLIENT','idClient', 'idMission','idPersonne','idPrestation','idCompte')
                 AND ordinal_position = 1";
-        $subBtns = controleur::doSubBtns($sql);
+        $subBtns = ControleBtn::doSubBtns($sql);
         echo $subBtns
         ?>
     </section>
