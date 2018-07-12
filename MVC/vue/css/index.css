@@ -18,7 +18,12 @@
     margin-right: 5em;
 }
 
-/**********Mise en forme de bouton*/
+/**********Mise en forme de bouton***********************/
+.container{
+    background-color: whitesmoke;
+}
+
+/**********Mise en forme de bouton***********************/
 #mainBtn>div{
     margin: 10px;
 }
