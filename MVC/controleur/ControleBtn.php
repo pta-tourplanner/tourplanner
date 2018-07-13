@@ -53,6 +53,7 @@ class ControleBtn{
             throw new Exception("Error BDD", $e->getMessage());
         }
     }
+
     /**
      * Méthode qui envoie les nom de table d'une requête SQL
      * passée en paramètre sous la forme bouton secondaire de HTML
@@ -80,6 +81,19 @@ class ControleBtn{
             $connexion->disconnect();
         } catch (PDOException $e) {
             throw new Exception("Error BDD", $e->getMessage());
+        }
+    }
+
+     /**
+     * Méthode qui crée un bouton AJOUTER dans le HEADER
+     * @throws Exception
+     * @return echo $html
+     */
+    public static function doBtnAjout(){
+        if(isset($_GET['tab'])){
+            $html = '<a class="btn btn-warning offset-1" href="table_edite.php?tab='
+            . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=">Ajouter</a>';
+            echo $html;
         }
     }
 }
