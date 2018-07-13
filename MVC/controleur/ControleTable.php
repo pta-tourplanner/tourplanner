@@ -8,7 +8,7 @@ class ControleTable{
 
     /**
      * Méthode qui envoie toutes les lignes d'une requête SQL
-     * passée en paramètre sous la forme tableau de HTML
+     * passée en paramètre sous la forme tableau de HTML avec deux boutons : éditer et supprimer
      * @param string table
      * @param array params
      * @throws Exception
@@ -95,6 +95,11 @@ class ControleTable{
         }
     }
 
+    /**
+     * Méthode qui envoie un formulaire pour éditer des données
+     * @throws Exception
+     * @return echo $html
+     */
     public static function editeTable(){
         try{
             // Connexion à la base de donnée
@@ -118,14 +123,14 @@ class ControleTable{
             if($data->rowCount() > 0){
                 $row = $data->fetch(); // Récupare des lignes
             } else {
-                for ($i = 0; $data->columnCount(); $i++){
+                for ($i = 0; $i < $data->columnCount(); $i++){
                     $row[$data->getColumnMeta($i)['name']] = '';
                 }
             }
             foreach ($row as $cle => $val) {
                 $html .= '<div class="form-group"><label for="input' . ucfirst($cle) . '">' . ucfirst($cle) . ' :</label>';
-                if( $cle == 'note'){
-                    $html .= '<textarea class="form-control" id="input' . ucfirst($cle) . '" row="3" style="hight: 200px"></textarea>';
+                if( $cle === 'note'){
+                    $html .= '<textarea class="form-control" id="input' . ucfirst($cle) . '" name="' . $cle . '" row="3" style="hight: 200px">' . $val . '</textarea>';
                 } else {
                     $html .= '<input class="form-control" type="text" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';
                 }
@@ -139,4 +144,91 @@ class ControleTable{
             throw new Exception('ERR_BDD : ' . $e->getMessage());
         }
     }
+
+    /**
+     * Méthode pour UPDATE ou INSERT des données 
+     * @throws Exception
+     * @header location : table_liste_pta.php
+     */
+    public static function sauveTable(){
+        try{
+            // Connexion à la base de données
+            $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
+            // Teste si c'est UPDATE ou INSERT
+            if(isset($_GET['id'])){
+                // UPDATE
+                if(!empty($_GET['id'])){
+                    $sql = "UPDATE " . $_GET['tab'] . " SET ";
+                    foreach($_POST as $cle => $val){
+                        $sql .= $cle . "=:" . $cle . ",";
+                    }
+                    $sql = substr($sql, 0, strlen($sql)-1);
+                    $sql .= " WHERE " . $_GET['col'] . "=:" . $_GET['col'];
+                    
+                    var_dump($_POST);
+                    echo $sql;
+                // INSERT
+                } else {
+                    $sql = "INSERT INTO " . $_GET['tab'] . " (";
+                    foreach ($_POST as $cle => $val) {
+                        $sql .= $cle . ",";
+                    }
+                    $sql = substr($sql, 0, strlen($sql)-1);
+                    $sql .= ") VALUES(";
+                    foreach($_POST as $cle => $val) {
+                        $sql .= ":" . $cle . ",";
+                    }
+                    $sql = substr($sql, 0, strlen($sql)-1);
+                    $sql .= ")";
+                }
+                // Préparation de la requête
+                $data = $connexion->getConnexion()->prepare($sql);
+                // Définit le tableau des paramètres
+                $params = array();
+                
+                foreach ($_POST as $cle => $val) {
+                    $params[":" . $cle] = $val;
+                }
+
+                //  Exécute la requête
+                $data->execute($params);
+                // Fin de la connexion
+                $connexion->disconnect();
+                // Redirige vers la liste
+                header('location:table_liste_pta.php?tab=' . $_GET['tab'] . '&col=' . $_GET['col']);
+            }
+        } catch(PDOException $e){
+            throw new Exception('ERR_BDD : ' . $e->getMessage());
+        }
+    }
+
+     /**
+     * Méthode pour Supprimer des données existantes
+     * @throws Exception
+     * @header location : table_liste_pta.php
+     */
+     public static function supprTable(){
+        try{
+            //  Connéxion à la base de données
+            $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
+
+            if(isset($_GET['id'])){
+                if(!empty($_GET['id'])){
+                    // Code pour DELETE
+                    $sql = 'DELETE FROM ' . $_GET['tab'] . ' WHERE ' . $_GET['col'] . ' = ' . $_GET['id'];
+                }
+                // Exécute la requête
+                $connexion->getConnexion()->exec($sql);
+
+                // Ferme la connexion
+                $connexion->disconnect();
+                // Redirige vers la liste
+                header('location:table_liste_pta.php?tab=' . $_GET['tab'] . '&col=' . $_GET['col']);
+            }
+        } catch (PDOException $e){
+            throw new Exception('ERR_BDD :' . $e->getMessage());
+        }
+
+
+     }
 }
