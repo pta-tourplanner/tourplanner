@@ -1,3 +1,4 @@
+<?php require_once('../../controleur/ControleConnexion.php')?>
 <header id="header" class="jumbotron">
     <section id="entete" class="row">
         <div id="logo" class="col"> <!--col-sm-offset-4 col-sm-4 col-lg-2-->
@@ -7,6 +8,8 @@
         </div>
         <div id="titre" class="col">  <!--col-md-offset-6 col-md-6 col-lg-8-->
             <h2>PTA Tour Planner</h2>
+        <p><a href="../../controleur/logout.php" class="btn btn-outline-dark">Déconnexion</a></p>
+
         </div>
     </section>
         <div id="btnAjout" class="row">
