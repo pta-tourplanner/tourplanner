@@ -1,3 +1,7 @@
+<?php require_once('../../controleur/ControleConnexion.php'); 
+    ControleConnexion::testSession();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +13,7 @@
     <title>PTA Tour Planner</title>
 </head>
 <body class="container">
-    <!-- Association à controleur de Bouton -->
+    <!-- Association au controleur de Bouton -->
     <?php require_once('../../controleur/ControleBtn.php'); ?>
 
     <!-- L'ENTETE DE LA PAGE -->
