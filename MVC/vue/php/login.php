@@ -14,14 +14,14 @@
         <div class="card border-warning mb-3" style="max-width: 25rem;">
             <div class="card-header">
                 <div class="row">
-                    <img class="col-sm-4" src="../../../img/logo_pta.png" alt="Logo de PTA">
+                    <img id="logo" class="col-sm-4" src="../../img/logo_pta.png" alt="Logo de PTA">
                     <h3 class="card-title offset-sm-2 col-sm-6">Connéxion</h5>
                 </div>
             </div>
             <div class="card-body">
             <?= ControleConnexion::loginErr(); ?>
                 <div class="form-group">
-                    <label for="login">Email address</label>
+                    <label for="login">Email adresse</label>
                     <input type="email" id="login" class="form-control" name="login" placeholder="Adresse mail">
                 </div>
                 <div class="form-group">

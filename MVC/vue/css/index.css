@@ -1,7 +1,13 @@
+/**********Mise en forme de fond d'écran***********************/
+.container{
+    background-color: ivory;
+}
+
 /*********** Entête de la page****************************/
 #header{
     margin-top: 1em;
     width: 100%;
+    padding-bottom: 2ex; 
 }
 
 #entete{
@@ -19,10 +25,13 @@
     margin-right: 5em;
 }
 
-/**********Mise en forme de bouton***********************/
-.container{
-    background-color: whitesmoke;
+/*********** Mise en forme de Nav dans l'entête ***********************/
+
+#header #nav{
+    background-color: ivory;
+    margin: 1ex;
 }
+
 
 /**********Mise en forme de bouton***********************/
 #mainBtn>div{
@@ -35,14 +44,13 @@
 }
 
 
-
-
 /********* Pied de la page *****************************/
 
 #ligneFooter{
     height: 1px;
     width: 100%;
     background-color: #000000;
+    margin-top: 2em;
 }
 
 #foot{

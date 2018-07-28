@@ -43,7 +43,7 @@ class ControleConnexion{
      */
     public static function loginErr(){
         if(isset($_GET['passok']) && $_GET['passok'] == 0){
-            return $html = '<div class="alert alert-danger">L\'mail adress et/ou le mot de passe erroné.</div>';
+            return $html = '<div class="alert alert-danger">L\'email adresse et/ou le mot de passe erroné.</div>';
         }
     }
 }

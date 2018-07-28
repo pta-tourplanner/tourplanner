@@ -1,9 +1,12 @@
-<?php require_once('../../controleur/ControleConnexion.php')?>
+<?php 
+require_once('../../controleur/ControleConnexion.php');
+require_once('../../controleur/ControleBtn.php');
+?>
 <header id="header" class="jumbotron">
     <section id="entete" class="row">
         <div id="logo" class="col"> <!--col-sm-offset-4 col-sm-4 col-lg-2-->
             <a href="index.php">
-                <img src="../../../img/logo_pta.png" alt="LOGO PTA" class="rounded">
+                <img src="../../img/logo_pta.png" alt="LOGO PTA" class="rounded">
             </a>
         </div>
         <div id="titre" class="col">  <!--col-md-offset-6 col-md-6 col-lg-8-->
@@ -12,10 +15,8 @@
 
         </div>
     </section>
-        <div id="btnAjout" class="row">
-            <?php
-                require_once('../../controleur/ControleBtn.php');
-                ControleBtn::doBtnAjout();
-            ?>
+        <div id="nav">
+            <?php ControleBtn::doNav(); ?>
+            <?php ControleBtn::doBtnAjout(); ?>
         </div>
 </header>

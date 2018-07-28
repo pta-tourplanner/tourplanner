@@ -1,5 +1,9 @@
 <?php
+use modele\SQL;
+
 require_once(realpath(dirname(__FILE__) . '/../modele/pta.bdd.class.php'));
+require_once(realpath(dirname(__FILE__) . '/../modele/SQL.php'));
+
 
 /**
  *  La class qui gère la manipulation du tableau
@@ -7,22 +11,12 @@ require_once(realpath(dirname(__FILE__) . '/../modele/pta.bdd.class.php'));
 class ControleTable{
 
     /**
-     * Méthode qui envoie toutes les lignes d'une requête SQL
-     * passée en paramètre sous la forme tableau de HTML avec deux boutons : éditer et supprimer
-     * @param string table
-     * @param array params
-     * @throws Exception
+     * Méthode pour changer le couleur selon le nom de la table
+     * @param string $table
      * @return string
      */
-    public static function doTable($table = '', $params = array()){
-        try {
-            $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
-            // Exécution de la requête
-            $data = $connexion->getConnexion()->prepare('SELECT * FROM ' . $table);
-            $data->execute($params);
-            $couleur;
-            // Changement de couleur de la tableau selon de la table
-            switch ($_GET['tab']) {
+    public static function selectColor($table){
+        switch ($table) {
             case 'clients':
                 $couleur = 'warning';
                 break;
@@ -37,9 +31,58 @@ class ControleTable{
                 break;
             default:
                 $couleur = 'dark';
-            }
+        }
+        return $couleur;
+    }   
+    
+    /**
+    * Méthode pour l'alignement vs type de colonnes pour Mysql
+    * @param string $type
+    * @return string
+    */
+    public static function alignTable($type){
+        // Alignement vs type de colonnes pour Mysql
+        switch ($type) {
+            case 'NEWDECIMAL':
+            case 'FLOAT':
+            case 'LONG':
+                $align = 'right';
+                break;
+            case 'DATE':
+                $align = 'center';
+                break;
+            case 'VAR_STRING':
+                $align = 'left';
+                break;
+            default:
+                $align = 'left';
+        }
+        return $align;
+    }
+
+    /**
+     * Méthode qui envoie toutes les lignes d'une requête SQL
+     * passée en paramètre sous la forme tableau de HTML avec deux boutons : éditer et supprimer
+     * @param string table
+     * @param array params
+     * @throws Exception
+     * @return string
+     */
+    public static function doTable($table = '', $params = array()){
+        try {
+            $connexion = new BDD_PTA('mysql', 'pta', 'root', 'root', 'utf8', 'localhost');
+            // Select la requête SQL en utilisant la méthode selectSQL()
+            $sql = SQL::selectSQLTable($_GET['tab']);
+            // Exécution de la requête
+            $data = $connexion->getConnexion()->prepare($sql);
+            $data->execute($params);
+            $couleur;
+            // Changement de couleur de la tableau selon de la table
+            $couleur = self::selectColor($table);
+
             // Entête du tableau (méta-données)
-            $html = '<div class="table-responsive"><table class="table  table-sm table-bordered table-'. $couleur .' table-striped table-hover">';
+            $html = '<div id="pills-' . $_GET['tab'] . '" class="table-responsive tab-pane fade show active" role="tabpanel" aria-labelledby="pills-' . $_GET['tab'] .'">'.
+                    '<table id="" class="table table-sm table-bordered table-striped table-hover">';
             $html .= '<thead><tr>';
             if ($data->rowCount() > 0) {
                 // Construit l'en-tête
@@ -56,32 +99,18 @@ class ControleTable{
                     $html .= '<tr>';
                     foreach ($row as $cle => $val) {
                         // Alignement vs type de colonnes pour Mysql
-                        switch ($types[$cle]) {
-                            case 'NEWDECIMAL':
-                            case 'FLOAT':
-                            case 'LONG':
-                                $align = 'right';
-                                break;
-                            case 'DATE':
-                                $align = 'center';
-                                break;
-                            case 'VAR_STRING':
-                                $align = 'left';
-                                break;
-                            default:
-                                $align = 'left';
-                        }
+                        $align = self::alignTable($types[$cle]);
                         $html .= '<td align="' . $align . '">' . $val . '</td>';
                     }
                     // Ajouter un btn EDITER
                     $html .= '<td><a href="table_edite.php?tab='
-                            . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=' . $row[$_GET['col']] .
+                            . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=' . $row['ID'] .
                             '" class="btn btn-success">Editer</a></td>';
                 
-                    // Ahouter un btn SUPPRIMER
+                    // Ajouter un btn SUPPRIMER
                     $html .= '<td><a href="table_suppr.php?tab='
                         . $_GET['tab']. '&col=' . $_GET['col']
-                        . '&id=' . $row[$_GET['col']]
+                        . '&id=' . $row['ID']
                         . '" class="btn btn-danger">Supprimer</a></td>';
                     $html .= '</tr>';
                 }
@@ -107,14 +136,16 @@ class ControleTable{
             if (isset($_GET['id']) && !empty($_GET['id'])){
                 $id = $_GET['id'];
                 // Prépare la requête
-                $sql = sprintf('SELECT * FROM %s WHERE %s = :val', $_GET['tab'], $_GET['col']);
-                $params = array(':val' => $id);
+                $sql = SQL::selectSQLForm($_GET['tab']);
+                $sql .= " WHERE " .  $_GET['col'] . " = " . $id;
+                // $params = array(':val' => $id);
                 // Excution de la rêquete
                 $data = $connexion->getConnexion()->prepare($sql);
-                $data->execute($params);
+                $data->execute();
             } else {
                 // Si pas d' ID (INSERT)
-                $data = $connexion->getConnexion()->query('SELECT * FROM ' . $_GET['tab'] . ' WHERE 1=2');
+                $sql .= " WHERE 1 = 2";
+                $data = $connexion->getConnexion()->query($sql);
             }
             // Contruit le formulaire
             $html = '<form action="table_sauve.php?tab=' 
@@ -129,14 +160,17 @@ class ControleTable{
             }
             foreach ($row as $cle => $val) {
                 $html .= '<div class="form-group"><label for="input' . ucfirst($cle) . '">' . ucfirst($cle) . ' :</label>';
-                if( $cle === 'note'){
+                if( $cle === 'Note'){
                     $html .= '<textarea class="form-control" id="input' . ucfirst($cle) . '" name="' . $cle . '" row="3" style="hight: 200px">' . $val . '</textarea>';
+                } elseif ($cle === 'Debut' || $cle === 'Fin') {
+                    $html .= '<input class="form-control" type="date" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';                    
                 } else {
                     $html .= '<input class="form-control" type="text" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';
                 }
                 $html .= '</div>'; 
             }
             $html .= '<input type="submit" class="btn btn-primary" />';
+            $html .= '<input type="button" class="btn btn-outline-dark" value="Retour" onClick="history.go(-1);"/>';
             $html .= '</form>';
             echo $html; 
             $connexion->disconnect();
@@ -228,7 +262,5 @@ class ControleTable{
         } catch (PDOException $e){
             throw new Exception('ERR_BDD :' . $e->getMessage());
         }
-
-
      }
 }

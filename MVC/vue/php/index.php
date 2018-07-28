@@ -1,6 +1,8 @@
 <?php require_once('../../controleur/ControleConnexion.php'); 
     ControleConnexion::testSession();
 ?>
+<!-- Association au controleur de Bouton -->
+<?php require_once('../../controleur/ControleBtn.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,44 +15,22 @@
     <title>PTA Tour Planner</title>
 </head>
 <body class="container">
-    <!-- Association au controleur de Bouton -->
-    <?php require_once('../../controleur/ControleBtn.php'); ?>
 
     <!-- L'ENTETE DE LA PAGE -->
     <?php include('header.php'); ?>
     
     <!-- LE CORPS -->
     <!-- Création des boutons principaux -->
-    <section id="mainBtn" class="row">
-        <?php
-        $sql = "SELECT t.table_name, c.column_name
-                FROM information_schema.tables t
-                JOIN information_schema.key_column_usage c
-                ON t.table_name = c.table_name
-                WHERE   t.table_schema='pta'
-                AND c.constraint_name= 'PRIMARY'
-                AND c.column_name  IN ('idClient', 'idMission','idPersonne','idPrestation')
-                AND ordinal_position = 1";
-        $btns = ControleBtn::doLgBtns($sql);
-        echo $btns;
-        ?>
+    <section id="mainBtn" class="row justify-content-center">
+        <?php ControleBtn::doLgBtns(); ?>
     </section>
+
         <!-- Création des boutons secondaire -->
-    <section id="subBtn" class="row">
-        <?php 
-        $sql = "SELECT t.table_name, c.column_name
-                FROM information_schema.tables t
-                JOIN information_schema.key_column_usage c
-                ON t.table_name = c.table_name
-                WHERE   t.table_schema='pta'
-                AND c.constraint_name= 'PRIMARY'
-                AND c.column_name  NOT IN ('CODE_CLIENT','idClient', 'idMission','idPersonne','idPrestation','idCompte')
-                AND ordinal_position = 1";
-        $subBtns = ControleBtn::doSubBtns($sql);
-        echo $subBtns
-        ?>
+    <section id="subBtn" class="row justify-content-center">
+        <?php $subBtns = ControleBtn::doSubBtns(); ?>
     </section>
     <!-- LE PIED DE PAGE -->
+    <script src="js/index.js"></script>
     <?php include('footer.php'); ?>
 </body>
 </html>
