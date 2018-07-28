@@ -58,6 +58,32 @@ class ControleTable{
                 $align = 'left';
         }
         return $align;
+    }   
+    
+    /**
+    * Méthode pour selectionner des inputs selon leur type de saisi
+    * @param string $key 
+    * @param string $value
+    * @return string
+    */
+    public static function selectTypeInput($type){
+        // Alignement vs type de colonnes pour Mysql
+        switch ($type) {
+            case 'NEWDECIMAL':
+            case 'FLOAT':
+            case 'LONG':
+                $align = 'right';
+                break;
+            case 'DATE':
+                $align = 'center';
+                break;
+            case 'VAR_STRING':
+                $align = 'left';
+                break;
+            default:
+                $align = 'left';
+        }
+        return $align;
     }
 
     /**
@@ -160,10 +186,12 @@ class ControleTable{
             }
             foreach ($row as $cle => $val) {
                 $html .= '<div class="form-group"><label for="input' . ucfirst($cle) . '">' . ucfirst($cle) . ' :</label>';
-                if( $cle === 'Note'){
-                    $html .= '<textarea class="form-control" id="input' . ucfirst($cle) . '" name="' . $cle . '" row="3" style="hight: 200px">' . $val . '</textarea>';
+                if($cle === "ID"){
+                    $html .= '<input class="form-control"  type="text" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';                    
                 } elseif ($cle === 'Debut' || $cle === 'Fin') {
                     $html .= '<input class="form-control" type="date" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';                    
+                } elseif ($cle === 'Note') {
+                    $html .= '<textarea class="form-control" id="input' . ucfirst($cle) . '" name="' . $cle . '" row="3" style="hight: 200px">' . $val . '</textarea>';
                 } else {
                     $html .= '<input class="form-control" type="text" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';
                 }
