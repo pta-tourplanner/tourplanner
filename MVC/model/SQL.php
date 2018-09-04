@@ -1,5 +1,5 @@
 <?php
-namespace modele;
+namespace model;
 
 /**
  * La class pour gérer des requête SQL 
@@ -45,7 +45,8 @@ class SQL
     {
         if ($table === 'clients') {
             return $sql = "SELECT idClient AS ID, 
-                                nom_societe AS 'Raison sociale', 
+                                nom_societe AS 'Raison sociale',
+                                adresse AS Adresse,
                                 code_postal AS 'Code postal',
                                 ville AS Ville,
                                 pays AS Pays,

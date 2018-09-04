@@ -1,6 +1,6 @@
 <?php 
-require_once('../../controleur/ControleConnexion.php');
-require_once('../../controleur/ControleBtn.php');
+require_once('../../controller/ControleConnexion.php');
+require_once('../../controller/ControleBtn.php');
 ?>
 <header id="header" class="jumbotron">
     <section id="entete" class="row">
@@ -11,7 +11,7 @@ require_once('../../controleur/ControleBtn.php');
         </div>
         <div id="titre" class="col">  <!--col-md-offset-6 col-md-6 col-lg-8-->
             <h2>PTA Tour Planner</h2>
-        <p><a href="../../controleur/logout.php" class="btn btn-outline-dark">Déconnexion</a></p>
+        <p><a href="../../controller/logout.php" class="btn btn-outline-dark">Déconnexion</a></p>
 
         </div>
     </section>

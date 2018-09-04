@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/minty/bootstrap.min.css" rel="stylesheet" integrity="sha384-4eGtnTOp6je5m6l1Zcp2WUGR9Y7kJZuAiD3Pk2GAW3uNRgHQSIqcrcAxBipzlbWP" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/login.css">
     <title>Connectez vous à PTA Tour Planner!</title>
 </head>
 <body class="container">
 <!-- Assosiation au controleur -->
-<?php require_once('../../controleur/ControleConnexion.php'); ?>
-    <form name="connexion" method="post" action="../../controleur/loginTraite.php">
-        <div class="card border-warning mb-3" style="max-width: 25rem;">
+<?php require_once('../../controller/ControleConnexion.php'); ?>
+    <form name="connexion" method="post" action="../../controller/loginTraite.php">
+        <div id="divConn" class="card border-warning mb-3" style="max-width: 25rem;">
             <div class="card-header">
                 <div class="row">
                     <img id="logo" class="col-sm-4" src="../../img/logo_pta.png" alt="Logo de PTA">

@@ -1,8 +1,8 @@
-<?php require_once('../../controleur/ControleConnexion.php'); 
+<?php require_once('../../controller/ControleConnexion.php'); 
     ControleConnexion::testSession();
 ?>
-<!-- Association au controleur de Bouton -->
-<?php require_once('../../controleur/ControleBtn.php'); ?>
+<!-- Association au controller de Bouton -->
+<?php require_once('../../controller/ControleBtn.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">

@@ -1,8 +1,8 @@
 <?php
-use \modele\SQL;
+use \model\SQL;
 
-require_once(realpath(dirname(__FILE__) .'/../modele/pta.bdd.class.php'));
-require_once(realpath(dirname(__FILE__) .'/../modele/SQL.php'));
+require_once(realpath(dirname(__FILE__) .'/../model/pta.bdd.class.php'));
+require_once(realpath(dirname(__FILE__) .'/../model/SQL.php'));
 require_once('ControleTable.php');
 /**
  *  La class qui gère la manipulation du bouton

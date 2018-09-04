@@ -1,6 +1,6 @@
 <!-- Association à controleur -->
-<?php require_once('../../controleur/ControleTable.php'); ?>
-<?php require_once('../../controleur/ControleBtn.php'); ?>
+<?php require_once('../../controller/ControleTable.php'); ?>
+<?php require_once('../../controller/ControleBtn.php'); ?>
 
 
 <!DOCTYPE html>

@@ -1,5 +1,5 @@
 <?php
-require_once(realpath(dirname(__FILE__) . '/../modele/pta.bdd.class.php'));
+require_once(realpath(dirname(__FILE__) . '/../model/pta.bdd.class.php'));
 
 /**
  *  La class qui gère la manipulation de la connexion

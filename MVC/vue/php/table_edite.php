@@ -10,7 +10,7 @@
 </head>
 <body class="container">
     <!-- Association à controleur de Bouton -->
-    <?php require_once('../../controleur/ControleTable.php'); ?>
+    <?php require_once('../../controller/ControleTable.php'); ?>
 
     <!-- L'ENTETE DE LA PAGE -->
     <?php include('header.php'); ?>

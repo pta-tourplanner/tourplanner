@@ -1,5 +1,5 @@
 <?php
-require_once(realpath(dirname(__FILE__) . '/../modele/pta.bdd.class.php'));
+require_once(realpath(dirname(__FILE__) . '/../model/pta.bdd.class.php'));
 
 // Teste si les login et mod de passe ont bien été saisis
 if (isset($_POST['login']) && !empty($_POST['login'])) {
