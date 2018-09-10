@@ -163,17 +163,25 @@ class ControleTable{
                 $id = $_GET['id'];
                 // Prépare la requête
                 $sql = SQL::selectSQLForm($_GET['tab']);
-                $sql .= " WHERE " .  $_GET['col'] . " = " . $id;
-                // $params = array(':val' => $id);
+                $sql .= " WHERE " .  $_GET['col'] . " = '" . $id . "'";
+                $sqlForName = SQL::selectSQLForName($_GET['tab']);
+                $sqlForName .= " WHERE " .  $_GET['col'] . " = '" . $id ."'";
+                $params = array(':val' => $id);
                 // Excution de la rêquete
                 $data = $connexion->getConnexion()->prepare($sql);
-                $data->execute();
+                $dataForName = $connexion->getConnexion()->prepare($sqlForName);
+                $data->execute($params);
+                $dataForName->execute($params);
             } else {
                 // Si pas d' ID (INSERT)
+                $sql = SQL::selectSQLForm($_GET['tab']);                
                 $sql .= " WHERE 1 = 2";
+                $sqlForName = "SELECT * FROM " . $_GET['tab'];
+                $sqlForName .= " WHERE 1 = 2";
                 $data = $connexion->getConnexion()->query($sql);
+                $dataForName = $connexion->getConnexion()->query($sqlForName);           
             }
-            // Contruit le formulaire
+            // Construit le formulaire
             $html = '<form action="table_sauve.php?tab=' 
                     . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=' . (isset($id)?$id:'') . '" method="post">';
             // Selon le nb de lignes renvoyées
@@ -184,20 +192,90 @@ class ControleTable{
                     $row[$data->getColumnMeta($i)['name']] = '';
                 }
             }
-            foreach ($row as $cle => $val) {
-                $html .= '<div class="form-group"><label for="input' . ucfirst($cle) . '">' . ucfirst($cle) . ' :</label>';
-                if($cle === "ID"){
-                    $html .= '<input class="form-control"  type="text" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';                    
-                } elseif ($cle === 'Debut' || $cle === 'Fin') {
-                    $html .= '<input class="form-control" type="date" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';                    
-                } elseif ($cle === 'Note') {
-                    $html .= '<textarea class="form-control" id="input' . ucfirst($cle) . '" name="' . $cle . '" row="3" style="hight: 200px">' . $val . '</textarea>';
-                } else {
-                    $html .= '<input class="form-control" type="text" id="input' . ucfirst($cle) . '" name="' . $cle . '" value="' . $val . '"/>';
+            if($dataForName->rowCount() > 0){
+                $rowForName = $dataForName->fetch(); // Récupare des lignes pour les names de input
+            } else {
+                for ($i = 0; $i < $dataForName->columnCount(); $i++){
+                    $rowForName[$dataForName->getColumnMeta($i)['name']] = '';
                 }
-                $html .= '</div>'; 
             }
-            $html .= '<input type="submit" class="btn btn-primary" />';
+            $countForName = 0; // le compteur pour getColumMeta(); 
+            foreach ($row as $cle => $val) {
+                $html .= '<div class="form-group"><label for="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '">' . ucfirst($cle) . ' :</label>';
+                if($cle === "ID") {
+                    $html .= '<input class="form-control"  type="text" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="' . $dataForName->getColumnMeta($countForName)['name'] . '" value="' . $val . '"/>';                    
+                // un formulaire avec le type DATE
+                } elseif ($cle === 'Debut' || $cle === 'Fin' || $cle === 'Date de service') {
+                    $html .= '<input class="form-control" type="date" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="' . $dataForName->getColumnMeta($countForName)['name'] . '" value="' . $val . '"/>';                    
+                // un formulaire avec le type TIME
+                } elseif ($cle === 'Durée' || $cle === 'Time' || $cle === 'Heure(s) supp. client' || $cle === 'Heure(s) supp. employe') {
+                    $html .= '<input class="form-control" type="time" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="' . $dataForName->getColumnMeta($countForName)['name'] . '" value="' . $val . '"/>';
+                // un formulaire avec la balise <textarea> pour le NOTE 
+                } elseif ($cle === 'Note') {
+                    $html .= '<textarea class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="' . $dataForName->getColumnMeta($countForName)['name'] . '" row="3" style="hight: 200px">' . $val . '</textarea>';
+                // un formulaire <select> pour la table prestations
+                } elseif ($cle === 'Saison' && $_GET['tab'] === 'prestations') {
+                    $html .= '<select class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="idSaison">';
+                    $sqlForSelectSaison = SQL::selectSQLForSelectSaison();
+                    $dataForSelectSaison = $connexion->getConnexion()->query($sqlForSelectSaison);
+                    while ($rowForSelectSaison = $dataForSelectSaison->fetch()){
+                        $html .= '<option value="'. $rowForSelectSaison['idSaison'] .'">' . $rowForSelectSaison['nom_saison'] . '</option>';
+                    }
+                    $html .= '</select>';
+                // Des formulaires <select> pour la table missions
+                // le SELCET pour CLIENT    
+                } elseif ($cle === 'Client' && $_GET['tab'] === 'missions') {
+                    $html .= '<select class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="nom_societe">';
+                    $sqlForSelectClient = SQL::selectSQLForSelectMission($cle);
+                    $dataForSelectClient = $connexion->getConnexion()->query($sqlForSelectClient);
+                    while ($rowForSelectClient = $dataForSelectClient->fetch()){
+                        $html .= '<option value="'. $rowForSelectClient['nom_societe'] .'">' . $rowForSelectClient['nom_societe'] . '</option>';
+                    }
+                    $html .= '</select>';
+                // le SELCET pour MEET    
+                } elseif ($cle === 'Meet' && $_GET['tab'] === 'missions') {
+                    $html .= '<select class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="nom_lieu">';
+                    $sqlForSelectMeet = SQL::selectSQLForSelectMission($cle);
+                    $dataForSelectMeet = $connexion->getConnexion()->query($sqlForSelectMeet);
+                    while ($rowForSelectMeet = $dataForSelectMeet->fetch()){
+                        $html .= '<option value="'. $rowForSelectMeet['nom_lieu'] .'">' . $rowForSelectMeet['nom_lieu'] . '</option>';
+                    }
+                    $html .= '</select>';
+                    // le SELCET pour COACH    
+                } elseif ($cle === 'Coach' && $_GET['tab'] === 'missions') {
+                    $html .= '<select class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="type_transport">';
+                    $sqlForSelectCoach = SQL::selectSQLForSelectMission($cle);
+                    $dataForSelectCoach = $connexion->getConnexion()->query($sqlForSelectCoach);
+                    while ($rowForSelectCoach = $dataForSelectCoach->fetch()){
+                        $html .= '<option value="'. $rowForSelectCoach['type_transport'] .'">' . $rowForSelectCoach['type_transport'] . '</option>';
+                    } 
+                    $html .= '</select>';
+                    // le SELCET pour IDTOUR    
+                } elseif ($cle === 'Tour N°' && $_GET['tab'] === 'missions') {
+                    $html .= '<select class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="idTour">';
+                    $sqlForSelectTour = SQL::selectSQLForSelectMission($cle);
+                    $dataForSelectTour = $connexion->getConnexion()->query($sqlForSelectTour);
+                    while ($rowForSelectTour = $dataForSelectTour->fetch()){
+                        $html .= '<option value="'. $rowForSelectTour['idTour'] .'">' . $rowForSelectTour['idTour'] . '</option>';
+                    }
+                    $html .= '</select>';
+                // le SELCET pour NOM_TOUR    
+                } elseif ($cle === 'Tour Name' && $_GET['tab'] === 'missions') {
+                    $html .= '<select class="form-control" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="nom_tour">';
+                    $sqlForSelectNomTour = SQL::selectSQLForSelectMission($cle);
+                    $dataForSelectNomTour = $connexion->getConnexion()->query($sqlForSelectNomTour);
+                    while ($rowForSelectNomTour = $dataForSelectNomTour->fetch()){
+                        $html .= '<option value="'. $rowForSelectNomTour['nom_tour'] .'">' . $rowForSelectNomTour['nom_tour'] . '</option>';
+                    }
+                    $html .= '</select>';
+                // un formulaire standard (type TEXT)
+                } else {
+                    $html .= '<input class="form-control" type="text" id="input' . ucfirst($dataForName->getColumnMeta($countForName)['name']) . '" name="' . $dataForName->getColumnMeta($countForName)['name'] . '" value="' . $val . '"/>';
+                }
+                $html .= '</div>';
+                ++$countForName;
+            }
+            $html .= '<input type="submit" class="btn btn-primary"/>';
             $html .= '<input type="button" class="btn btn-outline-dark" value="Retour" onClick="history.go(-1);"/>';
             $html .= '</form>';
             echo $html; 
@@ -220,16 +298,19 @@ class ControleTable{
             if(isset($_GET['id'])){
                 // UPDATE
                 if(!empty($_GET['id'])){
-                    $sql = "UPDATE " . $_GET['tab'] . " SET ";
-                    foreach($_POST as $cle => $val){
-                        $sql .= $cle . "=:" . $cle . ",";
-                    }
-                    $sql = substr($sql, 0, strlen($sql)-1);
-                    $sql .= " WHERE " . $_GET['col'] . "=:" . $_GET['col'];
-                    
-                    var_dump($_POST);
-                    echo $sql;
-                // INSERT
+                    if($_GET['tab'] === 'missions'){
+
+                    } elseif ($_GET['tab'] === 'prestations') {
+                        $sql = SQL::selectSQLForUpdatePresta();
+                    } else {
+                        $sql = "UPDATE " . $_GET['tab'] . " SET ";
+                        foreach($_POST as $cle => $val){
+                            $sql .= $cle . "=:" . $cle . ",";
+                        }
+                        $sql = substr($sql, 0, strlen($sql)-1);
+                        $sql .= " WHERE " . $_GET['col'] . "=:" . $_GET['col'];
+                    }         
+                    // INSERT
                 } else {
                     $sql = "INSERT INTO " . $_GET['tab'] . " (";
                     foreach ($_POST as $cle => $val) {
@@ -243,11 +324,13 @@ class ControleTable{
                     $sql = substr($sql, 0, strlen($sql)-1);
                     $sql .= ")";
                 }
+                var_dump($_POST);
+                echo $sql;
                 // Préparation de la requête
                 $data = $connexion->getConnexion()->prepare($sql);
                 // Définit le tableau des paramètres
                 $params = array();
-                
+
                 foreach ($_POST as $cle => $val) {
                     $params[":" . $cle] = $val;
                 }

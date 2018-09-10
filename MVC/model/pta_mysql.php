@@ -1,4 +1,5 @@
-<?php 
+<?php
+// Pour tester la connextion à la base de données
 // Connexion en PDO à la BDD PTA
 try{
     $host = 'localhost';
