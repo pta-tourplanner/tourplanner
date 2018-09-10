@@ -14,8 +14,8 @@
     display: flex;
 }
 
-#logo>img{
-    height: 100%;
+#logo img{
+    height: 150px;
 }
 
 #entete #titre{

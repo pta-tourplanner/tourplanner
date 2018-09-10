@@ -1,12 +1,12 @@
-#row>#logo{
-    width: 300px;
-    height: 300px;
-}
-
 .container{
     background-image: url("../../img/img_paris1.jpg");
     background-size: cover;
     background-attachment: fixed;
+}
+
+#logo{
+    width: 300px;
+    height: 150px;
 }
 
 #divConn{

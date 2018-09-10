@@ -12,11 +12,11 @@
 <!-- Assosiation au controleur -->
 <?php require_once('../../controller/ControleConnexion.php'); ?>
     <form name="connexion" method="post" action="../../controller/loginTraite.php">
-        <div id="divConn" class="card border-warning mb-3" style="max-width: 25rem;">
+        <div id="divConn" class="card border-warning mb-3" style="max-width: 30rem;">
             <div class="card-header">
                 <div class="row">
-                    <img id="logo" class="col-sm-4" src="../../img/logo_pta.png" alt="Logo de PTA">
-                    <h3 class="card-title offset-sm-2 col-sm-6">Connéxion</h5>
+                    <img id="logo" class="col-sm-5" src="../../img/PTA_2.png" alt="Logo de PTA">
+                    <h3 class="card-title offset-sm-1 col-sm-5">Connéxion</h5>
                 </div>
             </div>
             <div class="card-body">
