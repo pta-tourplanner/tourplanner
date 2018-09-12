@@ -276,9 +276,9 @@ class SQL
                             ";
         } elseif ($table === 'personnes') {
             return $sql = "SELECT idPersonne,
-                                genre,
                                 nom, 
                                 prenom, 
+                                genre,
                                 fonction,
                                 adresse,
                                 code_postal,

@@ -360,7 +360,7 @@ class ControleTable{
             if(isset($_GET['id'])){
                 if(!empty($_GET['id'])){
                     // Code pour DELETE
-                    $sql = 'DELETE FROM ' . $_GET['tab'] . ' WHERE ' . $_GET['col'] . ' = ' . $_GET['id'];
+                    $sql = 'DELETE FROM ' . $_GET['tab'] . ' WHERE ' . $_GET['col'] . ' = \'' . $_GET['id'] . '\'';
                 }
                 // Exécute la requête
                 $connexion->getConnexion()->exec($sql);
