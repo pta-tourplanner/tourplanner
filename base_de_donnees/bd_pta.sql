@@ -135,7 +135,7 @@ DROP TABLE IF EXISTS `pta`.`Clients` ;
 CREATE  TABLE IF NOT EXISTS `pta`.`Clients` (
   `idClient` INT NOT NULL AUTO_INCREMENT ,
   `nom_societe` VARCHAR(100) NOT NULL ,
-  `adress` VARCHAR(100) NULL ,
+  `adresse ` VARCHAR(100) NULL ,
   `code_postal` INT NULL ,
   `ville` VARCHAR(30) NULL ,
   `pays` VARCHAR(30) NULL ,
