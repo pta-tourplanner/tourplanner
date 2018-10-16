@@ -1,0 +1,136 @@
+AppBundle\Entity\Missions:
+    type: entity
+    table: missions
+    indexes:
+        fk_Missions_Prestations1:
+            columns:
+                - idPrestation
+    id:
+        idmission:
+            type: string
+            nullable: false
+            length: 10
+            options:
+                fixed: false
+            id: true
+            column: idMission
+            generator:
+                strategy: IDENTITY
+    fields:
+        date:
+            type: date
+            nullable: false
+        heure:
+            type: time
+            nullable: false
+        client:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+        meet:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+        coach:
+            type: string
+            nullable: false
+            length: 50
+            options:
+                fixed: false
+        idtour:
+            type: string
+            nullable: false
+            length: 25
+            options:
+                fixed: false
+            column: idTour
+        nomTour:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+            column: nom_tour
+        pax:
+            type: string
+            nullable: true
+            length: 6
+            options:
+                fixed: false
+        hotel:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+        service:
+            type: string
+            nullable: false
+            length: 20
+            options:
+                fixed: false
+        heureSuppClient:
+            type: time
+            nullable: true
+            column: heure_supp_client
+        heureSuppEmploye:
+            type: time
+            nullable: true
+            column: heure_supp_employe
+        noTcClient:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            column: no_tc_client
+        noTcEmploye:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            column: no_tc_employe
+        debours:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+        note:
+            type: string
+            nullable: true
+            length: 500
+            options:
+                fixed: false
+    manyToOne:
+        idprestation:
+            targetEntity: Prestations
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                idPrestation:
+                    referencedColumnName: idPrestation
+            orphanRemoval: false
+    manyToMany:
+        idpersonne:
+            targetEntity: Personnes
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: idmission
+            joinTable:
+                name: roles
+                joinColumns:
+                    -
+                        name: idMission
+                        referencedColumnName: idMission
+                inverseJoinColumns:
+                    -
+                        name: idPersonne
+                        referencedColumnName: idPersonne
+            orderBy: null
+    lifecycleCallbacks: {  }

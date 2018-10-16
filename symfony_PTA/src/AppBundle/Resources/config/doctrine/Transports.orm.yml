@@ -1,0 +1,28 @@
+AppBundle\Entity\Transports:
+    type: entity
+    table: transports
+    id:
+        idtransport:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            column: idTransport
+            generator:
+                strategy: IDENTITY
+    fields:
+        typeTransport:
+            type: string
+            nullable: false
+            length: 30
+            options:
+                fixed: false
+            column: type_transport
+        telephone:
+            type: string
+            nullable: true
+            length: 18
+            options:
+                fixed: false
+    lifecycleCallbacks: {  }

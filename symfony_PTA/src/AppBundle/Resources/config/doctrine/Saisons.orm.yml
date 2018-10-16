@@ -1,0 +1,28 @@
+AppBundle\Entity\Saisons:
+    type: entity
+    table: saisons
+    id:
+        idsaison:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            column: idSaison
+            generator:
+                strategy: IDENTITY
+    fields:
+        nomSaison:
+            type: string
+            nullable: false
+            length: 20
+            options:
+                fixed: false
+            column: nom_saison
+        debut:
+            type: date
+            nullable: false
+        fin:
+            type: date
+            nullable: false
+    lifecycleCallbacks: {  }

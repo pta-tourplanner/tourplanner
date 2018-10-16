@@ -1,0 +1,96 @@
+AppBundle\Entity\Personnes:
+    type: entity
+    table: personnes
+    id:
+        idpersonne:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            column: idPersonne
+            generator:
+                strategy: IDENTITY
+    fields:
+        nom:
+            type: string
+            nullable: false
+            length: 30
+            options:
+                fixed: false
+        prenom:
+            type: string
+            nullable: false
+            length: 30
+            options:
+                fixed: false
+        genre:
+            type: string
+            nullable: true
+            length: 3
+            options:
+                fixed: false
+        fonction:
+            type: string
+            nullable: false
+            length: 15
+            options:
+                fixed: false
+        adresse:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        codePostal:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: code_postal
+        ville:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+        pays:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+        email:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        telephone:
+            type: string
+            nullable: true
+            length: 18
+            options:
+                fixed: false
+        fax:
+            type: string
+            nullable: true
+            length: 18
+            options:
+                fixed: false
+        note:
+            type: string
+            nullable: true
+            length: 500
+            options:
+                fixed: false
+    manyToMany:
+        idmission:
+            targetEntity: Missions
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: idpersonne
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks: {  }

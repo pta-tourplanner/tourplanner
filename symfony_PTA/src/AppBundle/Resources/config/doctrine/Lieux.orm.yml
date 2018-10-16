@@ -1,0 +1,52 @@
+AppBundle\Entity\Lieux:
+    type: entity
+    table: lieux
+    id:
+        idlieu:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            column: idLieu
+            generator:
+                strategy: IDENTITY
+    fields:
+        nomLieu:
+            type: string
+            nullable: false
+            length: 100
+            options:
+                fixed: false
+            column: nom_lieu
+        adresse:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        codePostal:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: code_postal
+        ville:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+        pays:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+        note:
+            type: string
+            nullable: true
+            length: 500
+            options:
+                fixed: false
+    lifecycleCallbacks: {  }

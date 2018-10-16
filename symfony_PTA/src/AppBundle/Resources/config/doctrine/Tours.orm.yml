@@ -1,0 +1,23 @@
+AppBundle\Entity\Tours:
+    type: entity
+    table: tours
+    id:
+        idtour:
+            type: string
+            nullable: false
+            length: 30
+            options:
+                fixed: false
+            id: true
+            column: idTour
+            generator:
+                strategy: IDENTITY
+    fields:
+        nomTour:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+            column: nom_tour
+    lifecycleCallbacks: {  }

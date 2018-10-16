@@ -1,0 +1,59 @@
+AppBundle\Entity\Prestations:
+    type: entity
+    table: prestations
+    indexes:
+        fk_Prestations_Saisons1:
+            columns:
+                - idSaison
+    id:
+        idprestation:
+            type: string
+            nullable: false
+            length: 10
+            options:
+                fixed: false
+            id: true
+            column: idPrestation
+            generator:
+                strategy: IDENTITY
+    fields:
+        nomPrestation:
+            type: string
+            nullable: false
+            length: 50
+            options:
+                fixed: false
+            column: nom_prestation
+        duree:
+            type: time
+            nullable: false
+        tarifClient:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            column: tarif_client
+        tarifEmploye:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            column: tarif_employe
+        note:
+            type: string
+            nullable: true
+            length: 500
+            options:
+                fixed: false
+    manyToOne:
+        idsaison:
+            targetEntity: Saisons
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                idSaison:
+                    referencedColumnName: idSaison
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

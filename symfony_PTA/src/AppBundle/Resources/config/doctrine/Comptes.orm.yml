@@ -1,0 +1,43 @@
+AppBundle\Entity\Comptes:
+    type: entity
+    table: comptes
+    indexes:
+        fk_Comptes_Personnes1:
+            columns:
+                - idPersonne
+    id:
+        idcompte:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            column: idCompte
+        idpersonne:
+            associationKey: true
+    fields:
+        motPasse:
+            type: string
+            nullable: false
+            length: 15
+            options:
+                fixed: false
+            column: mot_passe
+        photo:
+            type: string
+            nullable: true
+            length: 45
+            options:
+                fixed: false
+    oneToOne:
+        idpersonne:
+            targetEntity: Personnes
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                idPersonne:
+                    referencedColumnName: idPersonne
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
