@@ -276,9 +276,9 @@ class SQL
                             ";
         } elseif ($table === 'personnes') {
             return $sql = "SELECT idPersonne,
-                                genre,
                                 nom, 
                                 prenom, 
+                                genre,
                                 fonction,
                                 adresse,
                                 code_postal,
@@ -379,14 +379,14 @@ class SQL
         return $sql = "UPDATE prestations p
                         JOIN saisons s
                             ON p.idSaison = s.idSaison
-                        SET p.idPrestation = :idPrestation,
-                            p.nom_prestation = :nom_prestation,
-                            p.idSaison = :idSaison,
-                            p.tarif_client = :tarif_client,
-                            p.tarif_employe = :tarif_employe,
-                            p.duree = :duree,
-                            p.note = :note
-                        WHERE p.idPrestation = :idPrestation1 
+                        SET p.idPrestation = :p.idPrestation,
+                            p.nom_prestation = :p.nom_prestation,
+                            p.idSaison = :p.idSaison,
+                            p.tarif_client = :p.tarif_client,
+                            p.tarif_employe = :p.tarif_employe,
+                            p.duree = :p.duree,
+                            p.note = :p.note
+                        WHERE p.idPrestation = :idPrestation 
                         ";
     }
 

@@ -45,5 +45,6 @@
             </div>
         </div>
     </form>
+    <script src="../js/slideshow.js"></script>
 </body>
 </html>

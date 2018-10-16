@@ -107,8 +107,10 @@ class ControleTable{
             $couleur = self::selectColor($table);
 
             // Entête du tableau (méta-données)
-            $html = '<div id="pills-' . $_GET['tab'] . '" class="table-responsive tab-pane fade show active" role="tabpanel" aria-labelledby="pills-' . $_GET['tab'] .'">'.
-                    '<table id="" class="table table-sm table-bordered table-striped table-hover">';
+            $html = '<div id="pills-' . $_GET['tab'] . 
+            '" class="table-responsive tab-pane fade show active" role="tabpanel" aria-labelledby="pills-'
+            . $_GET['tab'] .'">'.
+            '<table id="" class="table table-sm table-bordered table-striped table-hover">';
             $html .= '<thead><tr>';
             if ($data->rowCount() > 0) {
                 // Construit l'en-tête
@@ -128,32 +130,17 @@ class ControleTable{
                         $align = self::alignTable($types[$cle]);
                         $html .= '<td align="' . $align . '">' . $val . '</td>';
                     }
-                    // if ($_GET['tab'] == 'missions') {
-                    //     // Ajouter un btn EDITER pour missions
-                    //     $html .= '<td><a href="table_editeMission.php?tab='
-                    //             . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=' . $row['ID'] .
-                    //             '" class="btn btn-success">Editer</a></td>';
-                    
-                    //     // Ajouter un btn SUPPRIMER pour missions
-                    //     $html .= '<td><a href="table_supprMission.php?tab='
-                    //         . $_GET['tab']. '&col=' . $_GET['col']
-                    //         . '&id=' . $row['ID']
-                    //         . '" class="btn btn-danger">Supprimer</a></td>';
-                    //     $html .= '</tr>';
-                    // } else {
-                        // Ajouter un btn EDITER
-                        $html .= '<td><a href="table_edite.php?tab='
-                                . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=' . $row['ID'] .
-                                '" class="btn btn-success">Editer</a></td>';
-                    
-                        // Ajouter un btn SUPPRIMER
-                        $html .= '<td><a href="table_suppr.php?tab='
-                            . $_GET['tab']. '&col=' . $_GET['col']
-                            . '&id=' . $row['ID']
-                            . '" class="btn btn-danger">Supprimer</a></td>';
-                        $html .= '</tr>';
-
-                    // }
+                    // Ajouter un btn EDITER
+                    $html .= '<td><a href="table_edite.php?tab='
+                            . $_GET['tab'] . '&col=' . $_GET['col'] . '&id=' . $row['ID'] .
+                            '" class="btn btn-success">Editer</a></td>';
+                
+                    // Ajouter un btn SUPPRIMER
+                    $html .= '<td><a href="table_suppr.php?tab='
+                        . $_GET['tab']. '&col=' . $_GET['col']
+                        . '&id=' . $row['ID']
+                        . '" class="btn btn-danger">Supprimer</a></td>';
+                    $html .= '</tr>';
                 }
                 $html .= '</tbody>';
             }
@@ -191,7 +178,7 @@ class ControleTable{
                 // Si pas d' ID (INSERT)
                 $sql = SQL::selectSQLForm($_GET['tab']);                
                 $sql .= " WHERE 1 = 2";
-                $sqlForName = SQL::selectSQLForName($_GET['tab']);
+                $sqlForName = "SELECT * FROM " . $_GET['tab'];
                 $sqlForName .= " WHERE 1 = 2";
                 $data = $connexion->getConnexion()->query($sql);
                 $dataForName = $connexion->getConnexion()->query($sqlForName);           
@@ -313,7 +300,9 @@ class ControleTable{
             if(isset($_GET['id'])){
                 // UPDATE
                 if(!empty($_GET['id'])){
-                    if ($_GET['tab'] === 'prestations') {
+                    if($_GET['tab'] === 'missions'){
+
+                    } elseif ($_GET['tab'] === 'prestations') {
                         $sql = SQL::selectSQLForUpdatePresta();
                     } else {
                         $sql = "UPDATE " . $_GET['tab'] . " SET ";
@@ -330,7 +319,7 @@ class ControleTable{
                         $sql .= $cle . ",";
                     }
                     $sql = substr($sql, 0, strlen($sql)-1);
-                    $sql .= ") VALUES (";
+                    $sql .= ") VALUES(";
                     foreach($_POST as $cle => $val) {
                         $sql .= ":" . $cle . ",";
                     }
@@ -347,29 +336,9 @@ class ControleTable{
                 foreach ($_POST as $cle => $val) {
                     $params[":" . $cle] = $val;
                 }
-                if ($_GET['tab'] == 'clients' || $_GET['tab'] == 'personnes' || $_GET['tab'] == 'saisons' 
-                    || $_GET['tab'] == 'lieux' || $_GET['tab'] == 'transports' || $_GET['tab'] == 'tours'){
-                    $data->execute($params);
-                } elseif ($_GET['tab'] == 'prestations') {
-                    $data->bindParam(':idPrestation', $params[":idPrestation"]);
-                    $data->bindParam(':nom_prestation', $params[":nom_prestation"]);
-                    $data->bindParam(':idSaison', $params[":idSaison"]);
-                    $data->bindParam(':tarif_client', $params[":tarif_client"]);
-                    $data->bindParam(':tarif_employe', $params[":tarif_employe"]);
-                    $data->bindParam(':duree', $params[":duree"]);
-                    $data->bindParam(':note', $params[":note"]);
-                    // var_dump($data);
-                    if(isset($_GET['id']) && !empty($_GET['id'])){
-                        $data->bindParam(':idPrestation1', $params[":idPrestation"]);
-                } elseif ($_GET['tab'] == 'missions') {
-                    var_dump("gvgggf");
-                    $data->execute($params);
-                }
 
-                var_dump($params);
                 //  Exécute la requête
-                $data->execute();
-            }
+                $data->execute($params);
                 // Fin de la connexion
                 $connexion->disconnect();
                 // Redirige vers la liste
